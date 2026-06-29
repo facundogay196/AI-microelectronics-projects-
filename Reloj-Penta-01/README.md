@@ -43,10 +43,10 @@ Proyecto modular para ESP32 + OLED 0.96 (`128x64`) estilo Casio FW-91, con:
 
 ## Notas de sensores reales
 
-Actualmente `Sensors.cpp` usa valores simulados para validar UI.
-Cuando tengas hardware:
+Actualmente `Sensors.cpp` usa valores simulados solo para la brujula.
 
-- Reemplazar temperatura por lectura real (ej. BME280/DS18B20).
+
+- el 29-06-2026 se le agrego el sensor RDS18B20 y se modifico el codigo para que funcionara, fue un suceso!.
 - Reemplazar brujula por magnetometro calibrado (ej. QMC5883L/HMC5883L).
-- Reemplazar fase lunar por calculo astronomico con fecha RTC/NTP.
+- se le agrego un usuario y contraseña para que pueda conectarse a WIFI y usar la hora RTS|NTP para calcular la fase lunar.
 

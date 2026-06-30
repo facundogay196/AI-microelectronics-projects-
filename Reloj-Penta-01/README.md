@@ -43,7 +43,7 @@ Proyecto modular para ESP32 + OLED 0.96 (`128x64`) estilo Casio FW-91, con:
 
 ## Notas de sensores reales
 
-Actualmente `Sensors.cpp` usa valores simulados solo para la brujula.
+Actualmente `Sensors.cpp` usa valores simulados SOLO para la brujula.
 
 
 - el 29-06-2026 se le agrego el sensor RDS18B20 y se modifico el codigo para que funcionara, fue un suceso!.

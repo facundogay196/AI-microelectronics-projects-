@@ -45,8 +45,14 @@ Proyecto modular para ESP32 + OLED 0.96 (`128x64`) estilo Casio FW-91, con:
 
 Actualmente `Sensors.cpp` usa valores simulados SOLO para la brujula.
 
+## CAMBIOS EN EL TIEMPO   
 
-- el 29-06-2026 se le agrego el sensor RDS18B20 y se modifico el codigo para que funcionara, fue un suceso!.
+- Se le agrego el sensor RDS18B20 y se modifico el codigo para que funcionara, fue un suceso! (29-06-2026)
+- se le agrego un usuario y contraseña para que pueda conectarse a WIFI y usar la hora RTS|NTP para calcular la fase lunar. (29-06-2026)
+- Se le modifico el archivo "Luna.ino" para que el calculo de la luna utilize una formula aproximada derivada de los algoritmos de Jean Meeus. (09-08-2026)
+- se le agrego una bateria, habilitando la medicion de la misma y la carga. (09-08-2026)
+
+## CAMBIOS A REALIZAR
 - Reemplazar brujula por magnetometro calibrado (ej. QMC5883L/HMC5883L).
-- se le agrego un usuario y contraseña para que pueda conectarse a WIFI y usar la hora RTS|NTP para calcular la fase lunar.
+
 

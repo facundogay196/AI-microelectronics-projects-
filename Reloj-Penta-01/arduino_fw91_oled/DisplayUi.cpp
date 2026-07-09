@@ -7,7 +7,16 @@ static void drawBattery(Adafruit_SSD1306 &display, uint8_t x, uint8_t y, uint8_t
   uint8_t fill = map(pct, 0, 100, 0, 8);
   if (fill > 0) display.fillRect(x + 1, y + 1, fill, 3, SSD1306_WHITE);
 }
+static void drawWifiIcon(Adafruit_SSD1306 &display, uint8_t x, uint8_t y) {
 
+  display.drawPixel(x + 3, y + 5, SSD1306_WHITE);
+
+  display.drawCircle(x + 3, y + 5, 2, SSD1306_WHITE);
+  display.drawCircle(x + 3, y + 5, 4, SSD1306_WHITE);
+
+  // borrar la mitad inferior de los círculos
+  display.drawFastHLine(x - 1, y + 6, 10, SSD1306_BLACK);
+}
 static void drawMoonIcon(Adafruit_SSD1306 &display, uint8_t cx, uint8_t cy, uint8_t r, float illumPct) {
   display.drawCircle(cx, cy, r, SSD1306_WHITE);
   int8_t phaseShift = static_cast<int8_t>(map(static_cast<int>(illumPct), 0, 100, -r, r));
@@ -29,16 +38,20 @@ static void drawThermometerIcon(Adafruit_SSD1306 &display, uint8_t x, uint8_t y)
 static void drawHeader(Adafruit_SSD1306 &display, const UiState &ui) {
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
-  display.setCursor(3, 1);
+  display.setCursor(3, 2);
   if (ui.mode == MODE_TIME) display.print("TIME");
   else if (ui.mode == MODE_SENSOR) display.print("SENS");
   else display.print("SET ");
 
-  display.setCursor(46, 1);
+  display.setCursor(46, 2);
   if (ui.alarmOn) display.print("ALM ");
   if (ui.sigOn) display.print("SIG ");
   if (ui.btOn) display.print("BT");
-  drawBattery(display, 114, 2, ui.batteryPct);
+  
+  if (ui.wifiOn)
+    drawWifiIcon(display, 96, 1);
+
+  drawBattery(display, 113, 2, ui.batteryPct);
 }
 
 static void drawMainClock(Adafruit_SSD1306 &display, const UiState &ui) {
@@ -72,13 +85,13 @@ static void drawSensorStrip(Adafruit_SSD1306 &display, const UiState &ui) {
 
   // Temperatura
   drawThermometerIcon(display, 46, 46);
-  display.setCursor(56, 45);
+  display.setCursor(56, 44);
   display.print("TEMP");
   display.setCursor(56, 54);
   display.print(ui.tempC, 1);
 
   // Brújula
-  display.setCursor(82, 45);
+  display.setCursor(83, 44);
   display.print("BRUJULA");
   display.setCursor(93, 54);
   display.print(static_cast<int>(ui.smoothCompass));

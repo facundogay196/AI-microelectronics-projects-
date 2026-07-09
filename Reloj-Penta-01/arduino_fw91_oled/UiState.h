@@ -19,9 +19,11 @@ struct UiState {
   float smoothCompass = 248.0f;
   float moonIllum = 63.0f;
 
-  bool alarmOn = true;
-  bool sigOn = true;
+  bool alarmOn = false;
+  bool sigOn = false;
   bool btOn = false;
+  bool wifiOn = false;
+
   uint8_t batteryPct = 72;
 
   bool invertBlink = false;

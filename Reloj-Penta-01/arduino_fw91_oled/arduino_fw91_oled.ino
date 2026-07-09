@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-
+#include "WiFi_y_NTP.h"
 #include "Config.h"
 #include "UiState.h"
 #include "Sensors.h"
@@ -20,7 +20,18 @@ void setOledContrast(uint8_t value) {
   display.ssd1306_command(value);
 }
 void setup() {
+  
+  Serial.begin(115200);
+
+  delay(1000);
+
+  Serial.println();
+  Serial.println("===== RELOJ PENTA =====");
+  
   initButtons(buttons);
+  
+  ui.wifiOn = conectarWiFi();
+
   initSensors();
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {

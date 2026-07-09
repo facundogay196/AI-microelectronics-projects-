@@ -2,8 +2,8 @@
 #include "Sensors.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
-
-
+#include <time.h>
+float getMoonPhase();
 #define DS18B20_PIN 4
 
 OneWire oneWire(DS18B20_PIN);
@@ -12,22 +12,15 @@ DallasTemperature ds18b20(&oneWire);
 static unsigned long tTemp = 0;
 static unsigned long tCompass = 0;
 static unsigned long tMoon = 0;
+static bool moonInitialized = false;
 static const float kCompassAlpha = 0.2f;
 
 
 void initSensors() {
   
-  WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-  }
-
-  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-
   ds18b20.begin();
 }
-float getMoonPhase();
+
 void updateSensors(UiState &ui, unsigned long nowMs) {
   if (nowMs - tTemp >= 5000) {
     tTemp = nowMs;
@@ -47,23 +40,27 @@ void updateSensors(UiState &ui, unsigned long nowMs) {
     if (ui.compassDeg >= 360.0f) ui.compassDeg -= 360.0f;
     ui.smoothCompass = kCompassAlpha * ui.compassDeg + (1.0f - kCompassAlpha) * ui.smoothCompass;
   }
-
-  if (nowMs - tMoon >= 3600000UL) {
+// En el futuro tengo que cambiar 10000UL (10 segundos) a 8 horas ya que cada ese tiempo cambia aprox 1,1%
+  if (!moonInitialized || nowMs - tMoon >= 3600000UL) {
     tMoon = nowMs;
+    moonInitialized = true;
     // Placeholder fase lunar real (recalculo horario).
+    
     ui.moonIllum = getMoonPhase();
+    
+
+    Serial.print("Luna: ");
+    Serial.println(ui.moonIllum);
   }
 }
 
 void tickClock(UiState &ui) {
-  ui.second++;
-  if (ui.second >= 60) {
-    ui.second = 0;
-    ui.minute++;
-    if (ui.minute >= 60) {
-      ui.minute = 0;
-      ui.hour = (ui.hour + 1) % 24;
-    }
+  struct tm timeinfo;
+
+  if (getLocalTime(&timeinfo)) {
+    ui.hour = timeinfo.tm_hour;
+    ui.minute = timeinfo.tm_min;
+    ui.second = timeinfo.tm_sec;
   }
 }
 
